@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Desenho Livre → Epiciclos &amp; Som · AEM-Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/studio.css">
+</head>
+<body class="studio-body" data-single-module="desenho">
+  <header class="topbar">
+    <div class="brand-wrap">
+      <a class="brand" href="../index.html" title="Voltar à página introdutória">Transformada de Fourier<small>Módulo 04 · AEM-Lab</small></a>
+      <span class="sep"></span>
+      <a class="btn surf btn-sm" href="../index.html">← História</a>
+    </div>
+    <nav class="nav-tabs" aria-label="Módulos do Laboratório">
+      <a class="tab-btn" href="contornos.html">&#8750; Contornos</a>
+      <a class="tab-btn" href="ondas.html">&Sigma; Ondas &amp; Som</a>
+      <a class="tab-btn" href="helice.html">&#8495; Hélice 3D</a>
+      <a class="tab-btn active" href="desenho.html">&#9998; Desenho &rarr; Som</a>
+      <a class="tab-btn" href="mp3.html">&sung; MP3 &amp; Áudio</a>
+    </nav>
+    <div class="global-actions">
+      <button id="btnStopAllAudio" class="btn btn-sm" type="button" title="Silenciar todos os sons ativos">■ Silenciar</button>
+      <button id="btnTheme" class="btn btn-sm" type="button" title="Alternar tema claro/escuro">Tema</button>
+    </div>
+  </header>
+
+  <section id="tab-desenho" class="tab-panel active">
+    <div class="toolbar">
+      <span style="font:11px/1 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;">Formas:</span>
+      <button class="chip draw-preset" type="button" data-shape="star">Estrela</button>
+      <button class="chip draw-preset" type="button" data-shape="heart">Coração</button>
+      <button class="chip draw-preset" type="button" data-shape="note">Nota Musical</button>
+      <button class="chip draw-preset" type="button" data-shape="spiral">Espiral</button>
+      <button class="chip draw-preset" type="button" data-shape="square">Quadrado</button>
+      <button class="chip draw-preset" type="button" data-shape="wave">Onda Denteada</button>
+      <button id="drawClearBtn" class="btn btn-sm" type="button">Limpar para Desenhar</button>
+      <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <button id="drawPlayBtn" class="btn p" type="button">▶ Ouvir Desenho</button>
+      </div>
+    </div>
+    <div class="grid-2" style="flex:1;min-height:0;padding:8px 24px 18px;gap:16px;">
+      <div class="canvas-box" id="drawStage" style="min-height:300px;touch-action:none;cursor:crosshair;">
+        <canvas id="drawCv"></canvas>
+        <div class="draw-badge" id="drawBadge">Desenhe com o mouse ou toque mantendo pressionado — ao soltar, a DFT calcula os epiciclos e o som.</div>
+      </div>
+      <div class="card" style="justify-content:space-between;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="card-title">
+            <h3>Transformada de Desenho em Som</h3>
+            <span class="pill-stat">Energia: <b id="drawEnergyOut">100%</b></span>
+          </div>
+          <p class="hint">
+            O desenho vira um sinal complexo <i>z</i>(<i>t</i>) = <i>x</i>(<i>t</i>) + <i>i y</i>(<i>t</i>). Os raios e frequências dos epiciclos geram diretamente as ondas sonoras.
+          </p>
+          <label class="ctrl" style="justify-content:space-between;">
+            <span>Modo de Sonificação</span>
+            <select id="drawSoundMode">
+              <option value="wavetable">1. Timbre da Forma (Wavetable X/Y)</option>
+              <option value="arpeggio">2. Arpejo Musical dos Epiciclos</option>
+              <option value="stereo">3. Estéreo Osciloscópio (L=X, R=Y)</option>
+            </select>
+          </label>
+          <label class="ctrl" style="justify-content:space-between;">
+            <span>Frequência Fundamental (f₀)</span>
+            <span style="display:flex;gap:8px;align-items:center;">
+              <input id="drawBaseFreq" type="range" min="65" max="440" step="1" value="146">
+              <output id="drawBaseFreqOut">146 Hz</output>
+            </span>
+          </label>
+          <label class="ctrl" style="justify-content:space-between;">
+            <span>Círculos / Harmônicos (M)</span>
+            <span style="display:flex;gap:8px;align-items:center;">
+              <input id="drawM" type="range" min="1" max="256" value="60">
+              <output id="drawMOut">60</output>
+            </span>
+          </label>
+          <label class="ctrl" style="justify-content:space-between;">
+            <span>Velocidade dos Epiciclos</span>
+            <span style="display:flex;gap:8px;align-items:center;">
+              <input id="drawSpeed" type="range" min="0.2" max="3" step="0.1" value="1">
+              <output id="drawSpeedOut">1.0x</output>
+            </span>
+          </label>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <label class="ctrl"><input id="drawShowCircles" type="checkbox" checked> Círculos</label>
+            <label class="ctrl"><input id="drawShowOrig" type="checkbox" checked> Traço original</label>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <span class="hint" style="font:11px/1.4 var(--mono);">Onda Sonora Sintetizada &amp; Espectro dos Epiciclos</span>
+          <div class="canvas-box" style="height:170px;"><canvas id="drawAudioCv"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/core/theme.js"></script>
+  <script src="../js/core/fourier-math.js"></script>
+  <script src="../js/core/audio-engine.js"></script>
+  <script src="../js/core/canvas-utils.js"></script>
+  <script src="../js/modules/mod-desenho.js"></script>
+  <script src="../js/modules/studio-router.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => AEM.StudioRouter.start());
+  </script>
+</body>
+</html>
+

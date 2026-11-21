@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Transformada de Fourier · História, Teoria e Estúdio Interativo</title>
+  <meta name="description"
+    content="Da condução do calor de Joseph Fourier à FFT da Guerra Fria: introdução visual, biografia, matemática, aplicações e laboratório interativo em tempo real.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;1,300;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/landing.css">
+</head>
+
+<body>
+
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        Transformada de Fourier
+      </a>
+
+      <nav class="links hide-sm" aria-label="Seções do roteiro">
+        <a href="#introducao">Introdução</a>
+        <a href="#ciclos">Ciclos</a>
+        <a href="#contextualizacao">História</a>
+        <a href="#resumo-matematico">Matemática</a>
+        <a href="#aplicacoes">Aplicações</a>
+        <a href="#conclusao">Laboratório</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn p btn-sm" href="pages/contornos.html">Abrir Estúdio →</a>
+        <button id="tg" class="btn surf btn-sm" type="button" title="Alternar tema claro/escuro">Tema</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================================================================== -->
+    <!-- HERO: NARRATIVA + ANIMAÇÃO DO RETRATO DE JOSEPH FOURIER POR EPICICLOS -->
+    <!-- ===================================================================== -->
+    <div class="hero-wrap">
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
+      <div class="wrap">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <h1>Todo sinal complexo é apenas uma <span>soma de ondas simples </span>dançando juntas.</h1>
+            <p class="lead">
+              A <b>Transformada de Fourier</b> não é apenas uma fórmula matemática abstrata: ela é a ponte entre
+              o que vemos ou ouvimos no tempo e a receita secreta de vibrações simples que compõe qualquer sinal —
+              da sua voz no MP3 e das imagens JPEG até o radar, o Wi-Fi e a ressonância magnética.
+            </p>
+            <div class="hero-cta">
+              <a class="btn p lg" href="pages/contornos.html">▶ Abrir Estúdio Completo</a>
+              <a class="btn surf lg" href="#introducao">Entenda um pouco mais ↓</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="introducao">
+      <div class="wrap">
+        <h2>O que é uma transformação, um sinal? O que faz um algoritmo?</h2>
+        <p class="sub">
+          <b>Um algoritmo</b> nada mais é do que uma receita de bolo passo a passo para transformar dados brutos em uma
+          resposta útil.
+          Um <b>sinal</b> é qualquer grandeza física que carrega informação ao longo do tempo ou do espaço.
+          Uma <b>transformação matemática</b> é, na essência, uma troca de ponto de vista. Mudamos a forma de enxergar
+          uma quantidade: em vez de contá-la como “unidades soltas” (como riscos na areia ou um sistema de marcação),
+          passamos a vê-la como “grupos de dez” (o sistema decimal), conforme o que precisamos contar.
+        </p>
+
+        <div class="three">
+          <div>
+            <span class="k-tag">SINAIS</span>
+            <h4>Som, Luz e Coordenadas</h4>
+            <p>
+              Quando você fala, o ar vibra em variações de pressão — um sinal de áudio. Quando uma câmera registra uma
+              foto,ela mede a intensidade de vermelho, verde e azul (RGB) em cada pixel — um sinal espacial em 2D.
+            </p>
+          </div>
+          <div>
+            <span class="k-tag">DOMÍNIO DO TEMPO</span>
+            <h4>O Histórico Bruto</h4>
+            <p>
+              No dia a dia enxergamos o <b>domínio do tempo</b>: o microfone grava apenas uma única curva ondulada
+              mostrando o quanto a pressão do ar subiu e desceu em cada milissegundo, tudo misturado.
+            </p>
+          </div>
+          <div>
+            <span class="k-tag">DOMÍNIO DA FREQUÊNCIA</span>
+            <h4>O Espaço de Fourier</h4>
+            <p>
+              A Transformada de Fourier pega um padrão temporal (onda), mede cada ciclo possível e retorna a
+              "receita do ciclo" geral, devolvendo exatamente quais ondas puras
+              (senos e cossenos), com que força (amplitude) e em qual compasso (fase) foram somadas.
+            </p>
+          </div>
+        </div>
+
+        <div class="analogy-box">
+          <div>
+            <h4>A receita de uma vitamina</h4>
+            <p>
+              Ela nos faz passar da posição de consumidor para a de produtor: em vez de perguntar <i>“O que eu
+                tenho?”</i>,
+              passamos a perguntar <i>“Como isso foi feito?”</i> — dada uma vitamina pronta, queremos descobrir a
+              receita.
+              Ninguém conta uma análise gota a gota; a pessoa diz <i>“tomei uma vitamina de laranja e limão”</i>.
+              Uma receita é muito mais fácil de classificar, comparar e modificar do que a mistura pronta.
+            </p>
+          </div>
+          <a class="btn surf" href="pages/ondas.html">Testar com Ondas Reais →</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="ciclos">
+      <div class="wrap">
+        <h2>Veja o mundo como ciclos</h2>
+        <p class="sub">
+          A Transformada de Fourier adota um ponto de vista específico: e se qualquer sinal pudesse ser filtrado em uma
+          série de caminhos circulares? Ela encontra a receita para qualquer sinal em três passos.
+        </p>
+
+        <div class="three">
+          <div>
+            <span class="k-tag">PASSO 01 · ENTRADA</span>
+            <h4>Comece com um sinal no tempo</h4>
+            <p>
+              Partimos de uma curva bruta registrada instante a instante — pressão sonora no ar, batida sísmica ou
+              oscilação elétrica.
+            </p>
+          </div>
+          <div>
+            <span class="k-tag">PASSO 02 · SONDAGEM</span>
+            <h4>Meça cada ingrediente circular</h4>
+            <p>
+              Aplicamos filtros que giram o sinal em diferentes velocidades para medir quanto de cada possível
+              “ingrediente circular” está presente ali dentro.
+            </p>
+          </div>
+          <div>
+            <span class="k-tag">PASSO 03 · SAÍDA</span>
+            <h4>Reúna a receita completa</h4>
+            <p>
+              Listamos a quantidade e o ângulo de cada ingrediente circular. Com a receita em mãos, podemos filtrar,
+              comprimir ou comparar sinais inteiros em milissegundos.
+            </p>
+          </div>
+        </div>
+
+        <h3>Pense com círculos, e não só com senoides</h3>
+        <div class="circle-compare">
+          <div class="circle-card">
+            <span class="k-tag">1D vs 2D</span>
+            <h4>Movimento de vaivém vs trajetória circular</h4>
+            <p>
+              Uma <b>sinusoide</b> é um padrão específico de vaivém em uma única dimensão (uma onda senoidal ou
+              cossenoidal). Um <b>círculo</b> é o padrão redondo natural em 2D que você já conhece — e cada ingrediente
+              da
+              receita de Fourier gira como um movimento circular contínuo.
+            </p>
+          </div>
+          <div class="circle-card">
+            <span class="k-tag">INTUIÇÃO CONCEITUAL</span>
+            <h4>Por que “sinusoide complexa” confunde</h4>
+            <p>
+              Chamar uma trajetória circular de “sinusoide complexa” é como definir uma palavra como “algo feito de
+              várias letras”. Olha-se para o nível errado de detalhe: palavras tratam de conceitos, e círculos são a
+              ideia geométrica primária por trás da transformada.
+            </p>
+          </div>
+        </div>
+
+        <blockquote class="editorial">
+          “O estudo profundo da natureza é a fonte mais fecunda das descobertas matemáticas.”
+          <cite>— Joseph Fourier, Théorie analytique de la chaleur (1822)</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <section id="contextualizacao">
+      <div class="wrap">
+        <h2>Da teoria de 1822 ao algoritmo da Guerra Fria: o salto para a FFT</h2>
+        <p class="sub">
+          Por mais de um século, usar Fourier em computadores parecia impraticável para grandes volumes de dados: a
+          Transformada Discreta (DFT) exigia <i>N</i><sup>2</sup> operações. Tudo mudou sob pressão geopolítica.
+        </p>
+
+        <div class="timeline">
+          <div class="row">
+            <div class="k"><b>1805 · Prelúdio</b>Carl Friedrich Gauss</div>
+            <div>
+              <h4>Um manuscrito engavetado ao rastrear asteroides</h4>
+              <p>Antes mesmo de Cooley e Tukey, o matemático alemão Carl Friedrich Gauss já havia formulado o truque
+                algébrico recursivo para calcular rapidamente a órbita do asteroide Juno, mas escreveu em latim
+                neoclássico e nunca divulgou em larga escala — o trabalho só seria redescoberto em seus papéis póstumos.
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="k"><b>1954 – 1958</b>Bikini &amp; Genebra</div>
+            <div>
+              <h4>Como fiscalizar um tratado nuclear sem invadir o país rival?</h4>
+              <p>Após os testes termonucleares dos EUA (como o <i>Castle Bravo</i> de 1954) e da URSS, as negociações de
+                Genebra precisavam verificar explosões subterrâneas secretas à distância. Enquanto um terremoto natural
+                libera energia devagar em frequências baixas, uma bomba atômica gera um pulso agudo rico em frequências
+                altas — um problema clássico de espectro de Fourier.</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="k"><b>1963 · Vela Uniform</b>Garwin, Tukey &amp; Cooley</div>
+            <div>
+              <h4>Dividir para conquistar, operação borboleta e o disfarce do Hélio-3</h4>
+              <p>O programa norte-americano <i>Projeto Vela Uniform</i> precisava processar milhões de leituras sísmicas
+                em tempo real — impossível com a lentidão quadrática <i>O</i>(<i>N</i><sup>2</sup>) da DFT. No Comitê
+                Consultivo do presidente Kennedy, o estatístico <b>John Tukey</b> rabiscou para <b>Richard Garwin</b>
+                uma ideia genial: quebrar um sinal de <i>N</i> pontos em pares e ímpares recursivamente (reduzindo o
+                custo para <i>O</i>(<i>N</i> log<sub>2</sub> <i>N</i>)). Garwin levou a ideia ao pesquisador da IBM
+                <b>James Cooley</b>, camuflando o projeto como uma pesquisa civil sobre cristais de Hélio-3.
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="k"><b>1965 – 1983</b>Radar &amp; Paz Mundial</div>
+            <div>
+              <h4>Da publicação da FFT aos radares PAVE PAWS e GALOSH</h4>
+              <p>Quando Cooley e Tukey publicaram o algoritmo em 1965, o impacto foi imediato em radares de alerta
+                precoce (como o PAVE PAWS americano e o sistema antimíssil soviético GALOSH). A capacidade de analisar
+                rapidamente assinaturas de radar, ecos múltiplos e falsos reflexos solares ajudou sistemas de vigilância
+                — inclusive no famoso episódio de 1983 vivido pelo tenente-coronel soviético <b>Stanislav Petrov</b> — a
+                distinguir ameaças reais de anomalias atmosféricas e evitar uma escalada nuclear acidental.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap" aria-label="Comparação de complexidade computacional DFT vs FFT">
+          <table class="editorial-table">
+            <thead>
+              <tr>
+                <th>Amostras do Sinal (N)</th>
+                <th>DFT Direta · O(N²)</th>
+                <th>FFT Cooley-Tukey · O(N log₂ N)</th>
+                <th>Ganho de Velocidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="m">N = 1 024 (1 milissegundo de áudio)</td>
+                <td>~1 048 576 operações</td>
+                <td>~10 240 operações</td>
+                <td class="m">~102× mais rápido</td>
+              </tr>
+              <tr>
+                <td class="m">N = 65 536 (imagem 256×256)</td>
+                <td>~4 294 967 296 operações</td>
+                <td>~1 048 576 operações</td>
+                <td class="m">~4 096× mais rápido</td>
+              </tr>
+              <tr>
+                <td class="m">N = 1 048 576 (1 milhão de pontos)</td>
+                <td>~1,1 trilhão (horas de CPU)</td>
+                <td>~20,9 milhões (milissegundos)</td>
+                <td class="m">~52 428× mais rápido</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section id="resumo-matematico">
+      <div class="wrap">
+        <h2>Os seis pilares de uma única ideia geométrica</h2>
+        <p class="sub">
+          Por trás dos módulos interativos deste estúdio estão equações que conectam vibrações reais, números
+          complexos no plano de Argand e limites físicos da amostragem.
+        </p>
+
+        <div class="visual-formula-card" id="visualFormulaCard">
+          <div class="vf-head">
+            <span>Leitura Visual da Transformada Discreta (DFT)</span>
+            <span>Passe o mouse nos termos coloridos</span>
+          </div>
+
+          <div class="vf-eq" aria-label="X_k = (1/N) * somatório de n=0 até N-1 de x_n * e^(i 2 pi k n / N)">
+            <span class="vf-term vf-c-freq" data-part="freq"><i>X</i><sub><i>k</i></sub></span>
+            <span>=</span>
+            <span class="vf-term vf-c-avg" data-part="avg" style="display:inline-flex;align-items:center;gap:6px;">
+              <span class="vf-frac"><span>1</span><span><i>N</i></span></span>
+              <span class="vf-sum-wrap">
+                <span class="vf-sum-lim"><i>N</i>&minus;1</span>
+                <span class="vf-sum-glyph">&Sigma;</span>
+                <span class="vf-sum-lim"><i>n</i>=0</span>
+              </span>
+            </span>
+            <span class="vf-term vf-c-sig" data-part="sig"><i>x</i><sub><i>n</i></sub></span>
+            <span style="display:inline-flex;align-items:baseline;">
+              <span class="vf-term vf-c-spin" data-part="spin"><i>e</i><sup class="vf-sup"
+                  style="margin-left:1px;">i</sup></span>
+              <sup class="vf-sup">
+                <span class="vf-term vf-c-circ" data-part="circ">2&pi;</span>
+                <span class="vf-term vf-c-freq" data-part="freq"><i>k</i></span>
+                <span class="vf-term vf-c-circ" data-part="circ"><span class="vf-frac"
+                    style="font-size:0.86em;"><span><i>n</i></span><span><i>N</i></span></span></span>
+              </sup>
+            </span>
+          </div>
+
+          <p class="vf-sentence">
+            Para encontrar <span class="vf-phrase vf-c-freq" data-part="freq">a energia em uma frequência
+              específica</span>,
+            <span class="vf-phrase vf-c-spin" data-part="spin">gire</span>
+            <span class="vf-phrase vf-c-sig" data-part="sig">o seu sinal</span>
+            <span class="vf-phrase vf-c-circ" data-part="circ">ao redor de um círculo</span>
+            <span class="vf-phrase vf-c-freq" data-part="freq">nessa frequência</span>, e
+            <span class="vf-phrase vf-c-avg" data-part="avg">tire a média de vários pontos ao longo desse
+              caminho</span>.
+          </p>
+
+          <div class="vf-legend">
+            <span><i class="vf-dot" style="background:var(--h2);"></i> Frequência alvo (X<sub>k</sub>, k)</span>
+            <span><i class="vf-dot" style="background:var(--h0);"></i> Rotação complexa (e<sup>i</sup>)</span>
+            <span><i class="vf-dot" style="background:var(--h1);"></i> Amostra do sinal (x<sub>n</sub>)</span>
+            <span><i class="vf-dot" style="background:var(--h3);"></i> Volta no círculo (2&pi; &middot; n/N)</span>
+            <span><i class="vf-dot" style="background:var(--h5);"></i> Média dos pontos (1/N &Sigma;)</span>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div>
+            <div class="f-label">Análise Contínua (Sonda de Correlação)</div>
+            <div class="f-math">X(&omega;) = &int; x(t) &middot; <span>e<sup>&minus;i&omega;t</sup></span> dt</div>
+            <div class="f-note">Enrola o sinal x(t) em torno da origem na velocidade angular &omega;. Só quando &omega;
+              casa com uma frequência presente, o centro de massa escapa de zero.</div>
+          </div>
+          <div>
+            <div class="f-label">Síntese Complexa &amp; Epiciclos (Contornos)</div>
+            <div class="f-math">z(t) = &Sigma;<sub>k</sub> c<sub>k</sub> &middot; <span>e<sup>i 2&pi; k t</sup></span>
+            </div>
+            <div class="f-note">Soma de vetores giratórios (epiciclos): cada c<sub>k</sub> define o raio |c<sub>k</sub>|
+              e o ângulo inicial arg(c<sub>k</sub>) que desenham mapas e retratos.</div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <section id="aplicacoes">
+      <div class="wrap">
+        <h2>Onde a Transformada de Fourier trabalha enquanto você lê isto</h2>
+        <p class="sub">
+          De arquivos de áudio a exames médicos e comunicação sem fio, o mesmo truque matemático separa o ruído do sinal
+          útil e reduz arquivos gigantescos a poucos coeficientes essenciais.
+        </p>
+
+        <div class="cols">
+          <div class="col">
+            <span class="g">&sung;</span>
+            <span class="n">01 · COMPRESSÃO &amp; TIMBRE</span>
+            <h4>Áudio Digital, MP3 e Voz</h4>
+            <p>Em vez de guardar cada amostra de pressão no ar, o codec converte janelas de áudio via Fourier/MDCT,
+              descarta frequências mascaradas ou inaudíveis e comprime músicas em até 10× sem perda perceptível.</p>
+            <a class="col-link" href="pages/mp3.html">Analisar MP3 e microfone →</a>
+          </div>
+
+          <div class="col">
+            <span class="g">&#9635;</span>
+            <span class="n">02 · MODOS ESPACIAIS 2D</span>
+            <h4>Imagens, JPEG e Visão Computacional</h4>
+            <p>Imagens são sinais de brilho em duas dimensões. A maioria da energia de uma foto concentra-se em poucas
+              frequências baixas — descartar o restante gera a compressão JPEG ou destaca bordas nítidas.</p>
+          </div>
+
+          <div class="col">
+            <span class="g">&sim;</span>
+            <span class="n">03 · TELECOMUNICAÇÕES</span>
+            <h4>Wi-Fi, 4G/5G e Modulação OFDM</h4>
+            <p>Seu roteador usa FFT inversa no transmissor e FFT direta no celular milhares de vezes por segundo para
+              empacotar centenas de subportadoras ortogonais sem que uma atrapalhe a vizinha.</p>
+            <a class="col-link" href="pages/ondas.html">Explorar soma de ondas →</a>
+          </div>
+
+          <div class="col">
+            <span class="g">&#8853;</span>
+            <span class="n">04 · MEDICINA DIAGNÓSTICA</span>
+            <h4>Ressonância Magnética (RM)</h4>
+            <p>O aparelho de RM não fotografa seu cérebro diretamente: ele coleta ecos de rádio no chamado
+              <i>k-space</i> (domínio das frequências espaciais) e aplica a Transformada Inversa 2D para formar a imagem
+              clínica.
+            </p>
+          </div>
+
+          <div class="col">
+            <span class="g">&#8734;</span>
+            <span class="n">05 · RADAR &amp; GEOFÍSICA</span>
+            <h4>Sismologia e Detecção de Alvos</h4>
+            <p>De ondas sísmicas que revelam abalos tectônicos e testes subterrâneos ao efeito Doppler em radares
+              aeronáuticos, medir desvios de frequência separa objetos em movimento de eco estático.</p>
+            <a class="col-link" href="pages/helice.html">Inspecionar hélice complexa →</a>
+          </div>
+
+          <div class="col">
+            <span class="g">&#8750;</span>
+            <span class="n">06 · GEOMETRIA &amp; ROBÓTICA</span>
+            <h4>Contornos Complexos em Linguagem Natural</h4>
+            <p>Qualquer silhueta fechada — de objetos descritos em texto livre às fronteiras do Brasil — vira um sinal
+              complexo z(t) = x(t) + iy(t) desenhado por epiciclos.</p>
+            <a class="col-link" href="pages/contornos.html">Explorar contornos por texto →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="conclusao">
+      <div class="wrap">
+        <h2>Uma ponte universal da teoria térmica ao seu navegador</h2>
+        <p class="sub">
+          O que começou em 1807 como uma dúvida controversa sobre como o calor se espalha em barras de metal tornou-se a
+          espinha dorsal invisível da computação científica, das telecomunicações e da medicina moderna.
+        </p>
+
+        <div class="conclusao-grid">
+          <ul class="summary-list">
+            <li><b>1. Intuição física:</b> todo sinal complexo nasce da superposição de oscilações puras em frequências,
+              amplitudes e fases definidas.</li>
+            <li><b>2. Ir e vir sem perda:</b> com a Transformada Direta analisamos os ingredientes; com a Inversa
+              reconstruímos áudio, imagem ou contorno.</li>
+            <li><b>3. Eficiência decisiva:</b> foi a FFT (<i>N</i> log<sub>2</sub> <i>N</i>) que tirou Fourier dos
+              cadernos acadêmicos e permitiu comprimir mídia, decodificar Wi-Fi e processar radares em milissegundos.
+            </li>
+          </ul>
+        </div>
+        <div class="studio-cta">
+          <div>
+            <b>Explore os cinco módulos interativos do laboratório</b>
+            <p>Navegue diretamente pelas páginas dedicadas de cada experimento no menu superior.</p>
+          </div>
+          <a class="btn p lg" href="pages/contornos.html">Abrir Contornos →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap foot-inner">
+      <span>Desenvolvido por Lucas Lamin</span>
+      <span>Conteúdo baseado em Joseph Fourier (1822), Cooley &amp; Tukey (1965)</span>
+    </div>
+  </footer>
+
+  <script src="js/core/theme.js"></script>
+  <script src="js/core/fourier-math.js"></script>
+  <script src="js/core/canvas-utils.js"></script>
+  <script src="js/modules/hero-waves.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      AEM.Theme.bindButton('tg');
+      AEM.HeroWaves.init();
+      const vfCard = document.getElementById('visualFormulaCard');
+      if (vfCard) {
+        vfCard.querySelectorAll('[data-part]').forEach(el => {
+          el.addEventListener('mouseenter', () => { vfCard.dataset.hover = el.dataset.part; });
+          el.addEventListener('mouseleave', () => { delete vfCard.dataset.hover; });
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

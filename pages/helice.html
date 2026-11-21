@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Hélice 3D de Euler &amp; Epiciclos · AEM-Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/studio.css">
+</head>
+<body class="studio-body" data-single-module="helice">
+  <header class="topbar">
+    <div class="brand-wrap">
+      <a class="brand" href="../index.html" title="Voltar à página introdutória">Transformada de Fourier<small>Módulo 03 · AEM-Lab</small></a>
+      <span class="sep"></span>
+      <a class="btn surf btn-sm" href="../index.html">← História</a>
+    </div>
+    <nav class="nav-tabs" aria-label="Módulos do Laboratório">
+      <a class="tab-btn" href="contornos.html">&#8750; Contornos</a>
+      <a class="tab-btn" href="ondas.html">&Sigma; Ondas &amp; Som</a>
+      <a class="tab-btn active" href="helice.html">&#8495; Hélice 3D</a>
+      <a class="tab-btn" href="desenho.html">&#9998; Desenho &rarr; Som</a>
+      <a class="tab-btn" href="mp3.html">&sung; MP3 &amp; Áudio</a>
+    </nav>
+    <div class="global-actions">
+      <button id="btnStopAllAudio" class="btn btn-sm" type="button" title="Silenciar todos os sons ativos">■ Silenciar</button>
+      <button id="btnTheme" class="btn btn-sm" type="button" title="Alternar tema claro/escuro">Tema</button>
+    </div>
+  </header>
+
+  <section id="tab-helice" class="tab-panel active">
+    <div class="toolbar">
+      <button id="helixPlayBtn" class="btn p" type="button">▶ Ouvir Hélice</button>
+      <select id="helixMode" aria-label="Modo da hélice complexa">
+        <option value="ccw">Hélice Anti-horária: e^(+iωt) (+ω)</option>
+        <option value="cw">Hélice Horária: e^(-iωt) (−ω)</option>
+        <option value="sum" selected>Soma Real (Euler): ½(e^(+iωt) + e^(-iωt)) = cos(ωt)</option>
+        <option value="epicycle3d">Epiciclo 3D: Soma de 4 Hélices Complexas</option>
+      </select>
+      <button class="btn btn-sm helix-view" type="button" data-az="0.55" data-el="0.38">3D Oblíquo</button>
+      <button class="btn btn-sm helix-view" type="button" data-az="0" data-el="0">Frente (Argand)</button>
+      <button class="btn btn-sm helix-view" type="button" data-az="1.5708" data-el="0">Lado (Seno · Im)</button>
+      <button class="btn btn-sm helix-view" type="button" data-az="1.5708" data-el="1.5708">Topo (Cosseno · Re)</button>
+    </div>
+    <div class="status-bar">
+      <span>Arraste sobre o gráfico 3D para rotacionar a câmera e ver a espiral se projetar em seno, cosseno ou círculo.</span>
+      <span class="formula-pill" id="helixStatusInfo">e^(iθ) = cos θ + i sin θ</span>
+    </div>
+    <div class="canvas-stage" id="helixStage">
+      <canvas id="helixCv"></canvas>
+    </div>
+    <footer class="footer-bar">
+      <label class="ctrl">Frequência (ciclos) <input id="helixFreq" type="range" min="1" max="6" step="0.5" value="2"><output id="helixFreqOut">2.0</output></label>
+      <label class="ctrl">Velocidade <input id="helixSpeed" type="range" min="0" max="3" step="0.1" value="1"><output id="helixSpeedOut">1.0x</output></label>
+      <label class="ctrl"><input id="helixProj" type="checkbox" checked> Projetar sombras Re (cos) e Im (sin)</label>
+      <label class="ctrl"><input id="helixVectors" type="checkbox" checked> Ponteiros de relógio</label>
+    </footer>
+  </section>
+
+  <script src="../js/core/theme.js"></script>
+  <script src="../js/core/fourier-math.js"></script>
+  <script src="../js/core/audio-engine.js"></script>
+  <script src="../js/core/canvas-utils.js"></script>
+  <script src="../js/modules/mod-helice.js"></script>
+  <script src="../js/modules/studio-router.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => AEM.StudioRouter.start());
+  </script>
+</body>
+</html>
+

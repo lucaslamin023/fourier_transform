@@ -1,0 +1,99 @@
+/* ============================================================================
+ * AEM-Lab · Design System Tokens (Paleta Coffee)
+ * Fonte única da verdade para cores, tipografia e modos claro/escuro.
+ * ============================================================================ */
+:root {
+  --paper: #f5f0e8;
+  --paper2: #ede7d9;
+  --paper3: #e4dccb;
+  --ink: #1a1410;
+  --muted: #6b5e4e;
+  --border: #c8bca8;
+  --accent: #8b2500;
+  --accent-text: #8b2500;
+  --accent2: #1a4a6b;
+  --accent3: #2d5a27;
+  --gold: #b8860b;
+
+  /* Tokens semânticos para plots em canvas */
+  --bg: var(--paper);
+  --bg-elev: var(--paper);
+  --panel: var(--paper);
+  --panel-2: var(--paper2);
+  --fg: var(--ink);
+  --ring: var(--muted);
+  --outline: var(--border);
+  --trace: var(--accent-text);
+  --accent-2: var(--accent2);
+  --accent-3: var(--accent);
+  --accent-4: var(--accent3);
+  --line: var(--border);
+
+  /* Paleta harmônica discreta (modo claro) */
+  --h0: #8b2500;
+  --h1: #1a4a6b;
+  --h2: #2d5a27;
+  --h3: #b8860b;
+  --h4: #6b4226;
+  --h5: #5a3a66;
+  --h6: #9e471a;
+  --h7: #3a6357;
+
+  color-scheme: light;
+  --display: "Playfair Display", Georgia, serif;
+  --body: "Source Serif 4", Georgia, serif;
+  --mono: "JetBrains Mono", "Courier New", monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1a1410;
+    --paper2: #2a2018;
+    --paper3: #332a1e;
+    --ink: #f5f0e8;
+    --muted: #a89880;
+    --border: #4a3d2e;
+    --accent: #c0402a;
+    --accent-text: #e07a5f;
+    --accent2: #6fa3c7;
+    --accent3: #6ba368;
+    --gold: #d4a843;
+
+    --h0: #e07a5f;
+    --h1: #6fa3c7;
+    --h2: #6ba368;
+    --h3: #d4a843;
+    --h4: #c98c63;
+    --h5: #b494c7;
+    --h6: #de8b5b;
+    --h7: #7ab5a6;
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #1a1410;
+  --paper2: #2a2018;
+  --paper3: #332a1e;
+  --ink: #f5f0e8;
+  --muted: #a89880;
+  --border: #4a3d2e;
+  --accent: #c0402a;
+  --accent-text: #e07a5f;
+  --accent2: #6fa3c7;
+  --accent3: #6ba368;
+  --gold: #d4a843;
+
+  --h0: #e07a5f;
+  --h1: #6fa3c7;
+  --h2: #6ba368;
+  --h3: #d4a843;
+  --h4: #c98c63;
+  --h5: #b494c7;
+  --h6: #de8b5b;
+  --h7: #7ab5a6;
+
+  color-scheme: dark;
+}
+

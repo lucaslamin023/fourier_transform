@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Ondas, Harmônicos &amp; Som · Sintetizador de Fourier · AEM-Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/studio.css">
+</head>
+<body class="studio-body" data-single-module="ondas">
+  <header class="topbar">
+    <div class="brand-wrap">
+      <a class="brand" href="../index.html" title="Voltar à página introdutória">Transformada de Fourier<small>Módulo 02 · AEM-Lab</small></a>
+      <span class="sep"></span>
+      <a class="btn surf btn-sm" href="../index.html">← História</a>
+    </div>
+    <nav class="nav-tabs" aria-label="Módulos do Laboratório">
+      <a class="tab-btn" href="contornos.html">&#8750; Contornos</a>
+      <a class="tab-btn active" href="ondas.html">&Sigma; Ondas &amp; Som</a>
+      <a class="tab-btn" href="helice.html">&#8495; Hélice 3D</a>
+      <a class="tab-btn" href="desenho.html">&#9998; Desenho &rarr; Som</a>
+      <a class="tab-btn" href="mp3.html">&sung; MP3 &amp; Áudio</a>
+    </nav>
+    <div class="global-actions">
+      <button id="btnStopAllAudio" class="btn btn-sm" type="button" title="Silenciar todos os sons ativos">■ Silenciar</button>
+      <button id="btnTheme" class="btn btn-sm" type="button" title="Alternar tema claro/escuro">Tema</button>
+    </div>
+  </header>
+
+  <section id="tab-ondas" class="tab-panel active">
+    <div class="scroll-content">
+      <div class="card">
+        <div class="card-title">
+          <h2>Sintetizador &amp; Decomposição de Ondas</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            <button id="wavePlayBtn" class="btn p" type="button">▶ Tocar Som</button>
+            <button id="waveShufflePhaseBtn" class="btn" type="button" title="Altera apenas as fases mantendo as amplitudes idênticas">Embaralhar Fases</button>
+            <button id="waveZeroPhaseBtn" class="btn" type="button">↺ Zerar Fases</button>
+          </div>
+        </div>
+        <p class="hint">
+          Qualquer onda complexa é a soma de senoides puras (<i>f</i>(<i>t</i>) = &Sigma; <i>A</i><sub><i>n</i></sub> cos(2&pi;<i>n f</i><sub>0</sub><i>t</i> &minus; &theta;&prime;<sub><i>n</i></sub>)).
+          Escolha um formato clássico e ajuste os harmônicos ou barras individuais para observar a reconstrução e ouvir o timbre.
+          Use <b>Embaralhar Fases</b> para verificar como a forma da onda muda completamente mesmo com o espectro de amplitudes intacto.
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <button class="chip wave-preset active" type="button" data-preset="sine">Senoide Pura</button>
+          <button class="chip wave-preset" type="button" data-preset="square">Onda Quadrada (1/n ímpares)</button>
+          <button class="chip wave-preset" type="button" data-preset="saw">Dente de Serra (1/n)</button>
+          <button class="chip wave-preset" type="button" data-preset="tri">Triangular (1/n²)</button>
+          <button class="chip wave-preset" type="button" data-preset="voice">Voz / Formantes (f₀ + 2f₀ + 3f₀)</button>
+          <button class="chip wave-preset" type="button" data-preset="chord">Acorde Musical</button>
+          <button class="chip wave-preset" type="button" data-preset="random">Aleatória</button>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="card">
+            <div class="card-title">
+              <h3>1. Domínio do Tempo: Círculo Giratório + Soma das Ondas</h3>
+              <span class="formula-pill" id="waveFormulaInfo">f₀ = 220 Hz · N = 1</span>
+            </div>
+            <div class="canvas-box" style="height:260px;"><canvas id="waveTimeCv"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <h3>2. Domínio da Frequência: Espectro de Amplitude &amp; Fase</h3>
+              <span class="hint" style="font:11.5px/1.4 var(--mono);">Clique em uma barra para ouvir só aquela frequência</span>
+            </div>
+            <div class="canvas-box" style="height:210px;"><canvas id="waveSpecCv"></canvas></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <h3>Controles dos Harmônicos</h3>
+            <span class="hint" style="font:11.5px/1.4 var(--mono);">Aₙ e &theta;&prime;ₙ</span>
+          </div>
+          <label class="ctrl" style="justify-content:space-between;">
+            <span>Frequência Fundamental (f₀)</span>
+            <span style="display:flex;gap:8px;align-items:center;">
+              <input id="waveFreq" type="range" min="80" max="660" step="1" value="220">
+              <output id="waveFreqOut">220 Hz</output>
+            </span>
+          </label>
+          <label class="ctrl" style="justify-content:space-between;">
+            <span>Nº de Harmônicos (Preset)</span>
+            <span style="display:flex;gap:8px;align-items:center;">
+              <input id="waveNHarm" type="range" min="1" max="32" step="1" value="1">
+              <output id="waveNHarmOut">1</output>
+            </span>
+          </label>
+          <label class="ctrl">
+            <input id="waveShowComponents" type="checkbox" checked> Mostrar senoides individuais sobrepostas
+          </label>
+          <div class="mono-head">
+            <span>Harmônico</span><span>Amplitude (Aₙ)</span><span>Fase (θ'ₙ)</span><span>Cₙ / Dₙ</span>
+          </div>
+          <div class="harmonics-list" id="harmonicsList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/core/theme.js"></script>
+  <script src="../js/core/fourier-math.js"></script>
+  <script src="../js/core/audio-engine.js"></script>
+  <script src="../js/core/canvas-utils.js"></script>
+  <script src="../js/modules/mod-ondas.js"></script>
+  <script src="../js/modules/studio-router.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => AEM.StudioRouter.start());
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Contornos por Linguagem Natural · Série de Fourier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;1,300;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/studio.css">
+</head>
+
+<body class="studio-body" data-single-module="contornos">
+  <header class="topbar">
+    <div class="brand-wrap">
+      <a class="brand" href="../index.html" title="Voltar à página introdutória">Transformada de Fourier<small>Módulo 01
+          · AEM-Lab</small></a>
+      <span class="sep"></span>
+      <a class="btn surf btn-sm" href="../index.html">← História</a>
+    </div>
+    <nav class="nav-tabs" aria-label="Módulos do Laboratório">
+      <a class="tab-btn active" href="contornos.html">&#8750; Contornos</a>
+      <a class="tab-btn" href="ondas.html">&Sigma; Ondas &amp; Som</a>
+      <a class="tab-btn" href="helice.html">&#8495; Hélice 3D</a>
+      <a class="tab-btn" href="desenho.html">&#9998; Desenho &rarr; Som</a>
+      <a class="tab-btn" href="mp3.html">&sung; MP3 &amp; Áudio</a>
+    </nav>
+    <div class="global-actions">
+      <button id="btnTheme" class="btn btn-sm" type="button" title="Alternar tema claro/escuro">Tema</button>
+    </div>
+  </header>
+
+  <section id="tab-contornos" class="tab-panel active">
+    <div class="toolbar">
+      <form id="contourForm" style="display:flex;gap:8px;flex:1;min-width:250px;">
+        <input id="q" type="text" value="Um gato" placeholder="Uma palavra: " aria-label="Descrição do contorno"
+          autocomplete="off" style="flex:1;">
+        <button id="go" class="btn p" type="submit">Desenhar</button>
+      </form>
+    </div>
+    <div class="chips pad" id="chips"></div>
+    <div id="status" class="status-bar" role="status">
+      <span id="statusText">Inicializando…</span>
+      <span id="contourFallbackWrap"></span>
+    </div>
+    <div class="canvas-stage" id="contourStage">
+      <canvas id="cv"></canvas>
+    </div>
+    <footer class="footer-bar">
+      <label class="ctrl">Círculos <input id="m" type="range" min="0" max="1000" step="1" value="0"><output
+          id="mo">1</output></label>
+      <label class="ctrl">Velocidade <input id="sp" type="range" min="0.25" max="4" step="0.25" value="1"><output
+          id="spo">1x</output></label>
+      <label class="ctrl"><input id="ol" type="checkbox"> Contorno real</label>
+      <label class="ctrl"><input id="ci" type="checkbox" checked> Círculos</label>
+    </footer>
+  </section>
+
+  <script src="../js/core/theme.js"></script>
+  <script src="../js/core/fourier-math.js"></script>
+  <script src="../js/core/audio-engine.js"></script>
+  <script src="../js/core/canvas-utils.js"></script>
+  <script src="../js/modules/mod-contornos.js"></script>
+  <script src="../js/modules/studio-router.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => AEM.StudioRouter.start());
+  </script>
+</body>
+
+</html>
